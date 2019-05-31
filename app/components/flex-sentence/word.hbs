@@ -1,0 +1,10 @@
+{{#each @word.names as |name|}}
+  <@dag.node
+    @id={{name.id}}
+  >
+    <::Name
+      @name={{name}}
+      @dag={{@dag}}
+    />
+  </@dag.node>
+{{/each}}

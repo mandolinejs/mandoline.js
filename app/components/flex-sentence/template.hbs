@@ -1,0 +1,20 @@
+{{!
+  {{#each words as |word|}}
+    <Word @word={{word}} />
+  {{/each}}
+--}}
+<::Manager
+  @sentence={{@sentence}}
+  as |sentenceManager|
+>
+
+<FlexDag as |dag|>
+  {{#each sentenceManager.words as |word|}}
+    <::Word
+      @word={{word}}
+      @dag={{dag}}
+    />
+  {{/each}}
+</FlexDag>
+
+</::Manager>
