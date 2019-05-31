@@ -1,0 +1,9 @@
+{{#let (element (or @tag 'div')) as |Tag|}}
+  <Tag ...attributes
+    local-class='Element'
+    {{did-insert this.sayHello @id}}
+    {{will-destroy this.sayGoodbye}}
+  >
+    {{yield}}
+  </Tag>
+{{/let}}

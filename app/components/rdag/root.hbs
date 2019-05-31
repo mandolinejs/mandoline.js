@@ -1,0 +1,8 @@
+{{#let (element (or @tag 'div')) as |Tag|}}
+  <Tag ...attributes
+    local-class='Root'
+    {{did-insert this.startListening}}
+  >
+    {{yield}}
+  </Tag>
+{{/let}}

@@ -1,10 +1,11 @@
 {{#each @word.names as |name|}}
-  <@dag.node
+  <Rdag::Element
     @id={{name.id}}
   >
     <::Name
       @name={{name}}
-      @dag={{@dag}}
     />
-  </@dag.node>
+  </Rdag::Element>
+{{else}}
+  <strong>?</strong>
 {{/each}}

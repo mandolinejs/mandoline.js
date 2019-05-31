@@ -8,13 +8,12 @@
   as |sentenceManager|
 >
 
-<FlexDag as |dag|>
+<Rdag::Root>
   {{#each sentenceManager.words as |word|}}
     <::Word
       @word={{word}}
-      @dag={{dag}}
     />
   {{/each}}
-</FlexDag>
+</Rdag::Root>
 
 </::Manager>
