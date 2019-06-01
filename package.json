@@ -4,7 +4,7 @@
   "private": true,
   "description": "Small description for anotherflowiki goes here",
   "license": "MIT",
-  "author": "",
+  "author": "Abram Booth (aaxelb)",
   "directories": {
     "doc": "doc",
     "test": "tests"

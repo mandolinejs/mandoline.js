@@ -1,0 +1,7 @@
+{{#let (element (or @tag_name 'div')) as |Tag|}}
+  <Tag ...attributes
+    {{did-insert this.start_listening}}
+  >
+    {{yield}}
+  </Tag>
+{{/let}}

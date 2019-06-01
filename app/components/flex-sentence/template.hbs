@@ -3,17 +3,18 @@
     <Word @word={{word}} />
   {{/each}}
 --}}
-<::Manager
+
+<FlexSentence::Manager
   @sentence={{@sentence}}
-  as |sentenceManager|
+  as |sentence_manager|
 >
 
-<Rdag::Root>
-  {{#each sentenceManager.words as |word|}}
-    <::Word
-      @word={{word}}
+<Rdag>
+  {{#each sentence_manager.words as |word_manager|}}
+    <FlexSentence::Word
+      @manager={{word_manager}}
     />
   {{/each}}
-</Rdag::Root>
+</Rdag>
 
-</::Manager>
+</FlexSentence::Manager>
