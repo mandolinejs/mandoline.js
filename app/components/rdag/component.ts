@@ -11,11 +11,35 @@ export class RootEventHandlers implements RdagEventHandlers {
   }
 
   register(event: RdagEvent) {
-    // TODO
+    const {
+      target,
+      detail: {
+        target_key,
+        optional_args: {
+          delegate_element_manager,
+        },
+      },
+    } = event;
+
+    this.manager.register_element(
+      target,
+      target_key,
+      delegate_element_manager,
+    );
   }
 
   unregister(event: RdagEvent) {
-    // TODO
+    const {
+      target,
+      detail: {
+        target_key,
+      },
+    } = event;
+
+    this.manager.unregister_element(
+      target,
+      target_key,
+    );
   }
 }
 

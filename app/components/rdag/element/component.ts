@@ -3,15 +3,16 @@ import Component from '@glimmer/component';
 import {
   RdagEventHandlers,
 } from './events/handlers';
-import {
-  register_element,
-  unregister_element,,
-} from './utils';
 
 const element_event_handlers: Partial<RdagEventHandlers> = {
 };
 
-export default class RdagElement extends Component {
+type Args = {
+  key: Key;
+  tagName?: string;
+};
+
+export default class RdagElement extends Component<Args> {
   @tracked
   dom_element?: Element;
 
@@ -35,10 +36,12 @@ export default class RdagElement extends Component {
   say_hello(element: Element, key: unknown) {
     this.dom_element = element;
 
-    register_element(
-      element,
-      key,
-      manager => this.manager = manager,
+    element.dispatchEvent(
+      new RdagEvent(
+        'register',
+        key,
+        manager => this.manager = manager,
+      ),
     );
 
     add_rdag_event_listeners(
@@ -51,7 +54,10 @@ export default class RdagElement extends Component {
   say_goodbye(element: Element, key: unknown) {
     this.manager = undefined;
     this.dom_element = undefined;
-    unregister_element(element, key);
+
+    element.dispatchEvent(
+      new RdagEvent('unregister', key),
+    );
   }
 
   @action

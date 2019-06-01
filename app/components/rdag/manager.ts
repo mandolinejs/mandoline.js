@@ -64,14 +64,14 @@ export default class RdagManager {
   register_element(
     dom_element: Element,
     key: Key,
-    callback?: (manager: RdagElementManager) => void,
+    delegate_element_manager?: (manager: RdagElementManager) => void,
   ): RdagElementManager {
     this._element_to_key.set(element, key);
 
     const element_manager = this._get_or_create_element_manager(key);
     element_manager.add_dom_element(element);
-    if (callback) {
-      callback(element_manager);
+    if (delegate_element_manager) {
+      delegate_element_manager(element_manager);
     }
     return element_manager;
   }
