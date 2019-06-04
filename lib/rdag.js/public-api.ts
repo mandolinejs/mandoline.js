@@ -3,8 +3,6 @@
 
 export type NodeParams<T = unknown, Key> = {
   key: Key,
-  parents?: Array<Key>,
-  children?: Array<Key>,
 
   contents?: T,
 };
@@ -40,7 +38,8 @@ export interface Rdag<T, Key> {
   remove_node(
     key: Key,
     options?: RemoveOptions,
-  ): T;
+  ): void;
+  //): RemoveResult<T, Key>;
 
   // throws if key missing
   get_node(
@@ -61,7 +60,8 @@ export interface Rdag<T, Key> {
     parent_key: Key,
     child_key: Key,
     options?: RemoveOptions,
-  ): T;
+  ): void;
+  //): RemoveResult<T, Key>;
 
   // throws if key(s) missing
   get_edge(
@@ -73,6 +73,8 @@ export interface Rdag<T, Key> {
 export interface RdagNode<T, Key> {
   readonly key: Key;
   readonly depth: number;
+  readonly parent_count: number;
+  readonly child_count: number;
   readonly parents: ReadonlyArray<RdagEdge<T, Key>>;
   readonly children: ReadonlyArray<RdagEdge<T, Key>>;
   readonly parent_edges: ReadonlyArray<RdagEdge<T, Key>>;
@@ -90,3 +92,22 @@ export interface RdagEdge<T, Key> {
 
   contents: T;
 }
+
+  /*
+export type NodeRef<T, Key> = {
+  key: Key;
+  contents: T;
+};
+
+export type EdgeRef<T, Key> = {
+  parent_key: Key;
+  child_key: Key;
+  contents: T;
+};
+
+export type RemoveResult<T, Key> = {
+  target: NodeRef<T, Key> | EdgeRef<T, Key>;
+  removed_nodes: Array<NodeRef<T, Key>>;
+  removed_edges: Array<EdgeRef<T, Key>>;
+};
+   */
