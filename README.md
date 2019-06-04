@@ -14,3 +14,9 @@ parent `<Rdag::Element>`s.
 
 `RdagEvent` is an `Event` that will not be double-counted when it follows
 multiple paths to the same `<Rdag::Element>` or `<Rdag>` root.
+
+
+## rdag.js
+
+`rdag.js` is a mapping from arbitrary graph to RDAG. Easily represent a
+graph/network/web of objects and extract an RDAG-shaped slice.
