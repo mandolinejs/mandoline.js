@@ -43,7 +43,7 @@ export class RootEventHandlers implements RdagEventHandlers {
   }
 }
 
-export default class Rdag extends Component
+export default class RdagRoot extends Component
 {
   @action
   start_listening(element: Element) {

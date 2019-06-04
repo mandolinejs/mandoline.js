@@ -1,7 +1,15 @@
 {{#let (element (or @tag_name 'div')) as |Tag|}}
-  <Tag ...attributes
-    {{did-insert this.start_listening}}
+  <Rdag::Manager
+    @event_names={{@event_names}}
+    as |manager|
   >
-    {{yield}}
-  </Tag>
+    <Tag ...attributes
+      {{did-insert this.start_listening manager}}
+    >
+      {{yield (hash
+        manager=manager
+        Element=(component 'rdag/element' rdag_manager=manager)
+      )}}
+    </Tag>
+  </Rdag::Manager>
 {{/let}}

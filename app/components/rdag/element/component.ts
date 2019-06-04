@@ -4,25 +4,31 @@ import {
   RdagEventHandlers,
 } from './events/handlers';
 
+import { RdagManager } from '../manager';
+import { RdagElementManager } from './manager';
+
 const element_event_handlers: Partial<RdagEventHandlers> = {
 };
 
 type Args = {
-  key: Key;
-  tagName?: string;
+  rdag_manager: RdagManager,
+  key: Key,
+  tag_name?: string,
 };
 
 export default class RdagElement extends Component<Args> {
   @tracked
-  dom_element?: Element;
+  manager?: RdagElementManager;
 
   @tracked
-  manager?: RdagElementManager;
+  dom_element?: Element;
 
   get should_render_content() {
     const {
-      manager,
       dom_element,
+      args: {
+        manager,
+      }
     } = this;
 
     if (!manager || !dom_element) {
@@ -33,16 +39,14 @@ export default class RdagElement extends Component<Args> {
   }
 
   @action
-  say_hello(element: Element, key: unknown) {
-    this.dom_element = element;
+  say_hello(element: Element) {
+    const {
+      key,
+      rdag_manager,
+    } = this.args;
 
-    element.dispatchEvent(
-      new RdagEvent(
-        'register',
-        key,
-        manager => this.manager = manager,
-      ),
-    );
+    this.dom_element = element;
+    this.manager = rdag_manager.register_element(
 
     add_rdag_event_listeners(
       element,

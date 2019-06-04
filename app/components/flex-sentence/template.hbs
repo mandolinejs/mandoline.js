@@ -9,10 +9,11 @@
   as |sentence_manager|
 >
 
-<Rdag>
+<Rdag as |rdag|>
   {{#each sentence_manager.words as |word_manager|}}
     <FlexSentence::Word
       @manager={{word_manager}}
+      @rdag={{rdag}}
     />
   {{/each}}
 </Rdag>
