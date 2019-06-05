@@ -1,8 +1,11 @@
 Three related tools
 
-- collection of components that convince the DOM tree to act like a rooted
-  directed acyclic graph (RDAG)
-- graph navigation controls with RDAG breadcrumbs
+- [mandoline.js](./mandoline.js)
+  - A tool for cutting rooted slices from a graph
+  - e.g. DOM tree is a slice of an RDAG
+    breadcrumbs of a browsing session form a slice of the web
+
+- discrete navigation controls with RDAG breadcrumbs
 - text editor where each sentence is an RDAG of words
 
 ## rdag-dom
@@ -14,9 +17,3 @@ parent `<Rdag::Element>`s.
 
 `RdagEvent` is an `Event` that will not be double-counted when it follows
 multiple paths to the same `<Rdag::Element>` or `<Rdag>` root.
-
-
-## rdag.js
-
-`rdag.js` is a mapping from arbitrary graph to RDAG. Easily represent a
-graph/network/web of objects and extract an RDAG-shaped slice.
