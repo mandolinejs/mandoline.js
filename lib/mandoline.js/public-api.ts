@@ -44,23 +44,52 @@ type GraphSize = {
   //completeness: number; // [0, 1]
 };
 
-type to_rdag<T> =
-  T extends Graph<infer Key, infer N, infer E> ? Rdag<Key, N, E> :
-  T extends GraphNode<infer Key, infer N, infer E> ? RdagNode<Key, N, E> :
-  T extends GraphEdge<infer Key, infer N, infer E> ? RdagEdge<Key, N, E> :
-  never;
 
-type to_tree<T> =
-  T extends Graph<infer Key, infer N, infer E> ? Tree<Key, N, E> :
-  T extends GraphNode<infer Key, infer N, infer E> ? TreeNode<Key, N, E> :
-  T extends GraphEdge<infer Key, infer N, infer E> ? TreeEdge<Key, N, E> :
-  never;
+/**** constraints ****/
 
-type to_chain<T> =
-  T extends Graph<infer Key, infer N, infer E> ? Chain<Key, N, E> :
-  T extends GraphNode<infer Key, infer N, infer E> ? ChainNode<Key, N, E> :
-  T extends GraphEdge<infer Key, infer N, infer E> ? ChainEdge<Key, N, E> :
-  never;
+// define constraints such that:
+//  - able to verify whether a given graph fits
+//  - easy to slice a given graph to fit by adding/removing nodes/edges
+//  - given a graph that fits constraints:
+//      easy to verify whether individual changes will still fit
+
+// when importing/building from a given list of nodes/edges:
+//  - check constraints.
+// either (1) if possible, slice the input to fit within constraints
+//     or (2) error.
+
+// web constraints:
+//  - directed graph
+//  - at least one valid root
+//                 node with a path to each other node
+// slicing to fit:
+//  - given graph, maybe root
+//  - if root given, check constraints
+//  - if no root given, add an "index" root node with an edge to each other node
+
+// rdag constraints:
+//  - same as web
+//  - no cycles
+// slicing to fit:
+//  - given web, root
+//  - walk the web from the root
+//    at each node, prune outgoing edges to already-visited nodes
+
+// tree constraints:
+//  - rdag
+//  - each node has at most one incoming edge
+// slicing to fit:
+//  - given rdag
+//  - walk the rdag from its root, breadth first
+//    at each node, prune all but one incoming edge
+
+// pipe constraints:
+//  - rdag
+//  - exactly one leaf
+//                node with zero outgoing edges
+// slicing to fit:
+//  - given rdag, leaf
+//  - walk
 
 // Graphs!
 interface Graph<Key, N, E> {
@@ -68,30 +97,6 @@ interface Graph<Key, N, E> {
   readonly edges: ReadonlyArray<E>;
   readonly params: Readonly<GraphParams<Key>>;
 }
-
-/**** constraints ****/
-
-// when adding/deleting nodes/edges, error if a constraint is violated.
-// when importing/building from a given list of nodes/edges, check constraints.
-// either (1) slice the graph to fit within constraints
-//     or (2) error.
-
-// graph constraints:
-//  - directed
-//  - at least one valid root that has paths to all other nodes
-// cutting to fit:
-//  given digraph
-//  convince connectedness by adding "index" node that points
-//  to all other nodes, also guarantees a valid root
-
-// rdag: root, no cycles
-//  - given (graph, root), assign `root.depth = 0`,
-//                            (2) heuristically deleting edges until no cycles
-
-// tree: each node has at most one incoming edge
-//  - convince by
-
-// chain:
 
 type GraphParams = {
   graph?: {
