@@ -21,6 +21,7 @@ import {
 //                node with a path to each other node
 //
 //   verify given graph fits:
+//     todo
 //
 //   slice given graph, root to fit:
 //     walk the graph from the root
@@ -61,52 +62,6 @@ import {
 //   slice to fit
 //   given rdag, leaf:
 //     walk the rdag from the leaf, rootward
-
-function breadth_walk<Key extends string, N, E>(
-  graph: Graph<Key, N, E>,
-  root_key: Key,
-  options: WalkOptions<Key, N, E> = {},
-) {
-  const {
-    already_visited,
-    rootward,
-  } = options;
-  const visited = new KeySet<Key>();
-
-  return function* bf_walk_strategy(): WalkResults<Key> {
-    yield root_key;
-    visited.add(root_key);
-
-    for (const child_key in child_keys) {
-      yield* breadth_walk(
-        graph,
-        child_key,
-        {
-          already_visited:
-      );
-    }
-  };
-}
-
-type WalkOptions<Key extends string, N, E> = {
-  rootward?: boolean;
-  path?: *() => Key;
-  already_visited?: KeySet<Key>;
-  depth?:
-
-  from_each_node?: (this: N) => void;
-};
-
-type WalkResults<Key extends string> = {
-  visited: KeySet<Key>;
-  unvisited: KeySet<Key>;
-};
-
-function walk<Key, N, E>(
-  graph: Graph<Key, N, E>,
-  root: Key | N,
-) {
-}
 
 class Web<Key> implements Graph<Key, WebNode, WebEdge> {
   readonly nodes: ReadonlyArray<N>;
