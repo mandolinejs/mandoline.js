@@ -1,95 +1,88 @@
-import { Rdag } from './rdag/public-api';
+/**** graph constraints ****/
 
-type Graph = unknown;
-
-export type RdagSliceParams<T, Key> = {
-  nodes: Array<Key>,
-  edges: Array<[Key, Key]>,
-} | {
-  depth: number;
-};
-
-export type TreeSliceParams<T, Key> = {
-};
-
-export type ChainSliceParams<T, Key> = {
-};
-
-/**
- * throws if:
- *  - has a cycle
- *  - unconnected node
- *  - root is a lie
- */
-declare function rdag_slice<T, Key>(
-  graph: Graph,
-  root_key: Key,
-  params: RdagSliceParams<T, Key>,
-): Rdag<T, Key>;
-
-declare function tree_slice<T, Key>(
-  rdag: Rdag,
-  resolve_cycle: (
-  params: TreeSliceParams<T, Key>,
-): Tree<T, Key>;
-
-declare function chain_slice<T, Key>(
-  tree: Tree,
-  params: SliceParams<T, Key>,
-): Chain<T, Key>;
-
-type GraphSize = {
-  nodes: number;
-  edges: number;
-  //completeness: number; // [0, 1]
-};
-
-
-/**** constraints ****/
-
-// define constraints such that:
-//  - able to verify whether a given graph fits
-//  - easy to slice a given graph to fit by adding/removing nodes/edges
-//  - given a graph that fits constraints:
-//      easy to verify whether individual changes will still fit
-
-// when importing/building from a given list of nodes/edges:
-//  - check constraints.
-// either (1) if possible, slice the input to fit within constraints
-//     or (2) error.
+// define constraints, fit such that:
+//
+//   given graph:
+//     able to verify whether the graph fits
+//     easy to slice the graph to fit by removing/adding edges/nodes
+//
+//   given graph known to fit, small changes to the graph:
+//     easy to verify whether the changes would cause the graph not to fit
 
 // web constraints:
-//  - directed graph
-//  - at least one valid root
-//                 node with a path to each other node
-// slicing to fit:
-//  - given graph, maybe root
-//  - if root given, check constraints
-//  - if no root given, add an "index" root node with an edge to each other node
+//
+//   digraph
+//
+//   at least one valid root
+//                node with a path to each other node
+//
+//   verify given graph fits:
+//
+//   slice given graph, root to fit:
+//     walk the graph from the root
+//     prune un-visited nodes
+//
+//   slice given graph to fit:
+//     add "index" node as the graph's root node with an edge to each other node
 
 // rdag constraints:
-//  - same as web
-//  - no cycles
-// slicing to fit:
-//  - given web, root
-//  - walk the web from the root
-//    at each node, prune outgoing edges to already-visited nodes
+//
+//   web
+//
+//   no cycles
+//
+//   slice given web, root to fit:
+//     walk the web from the root
+//     from each node:
+//       prune its outgoing edges that point to the walk's already-visited-nodes
 
 // tree constraints:
-//  - rdag
-//  - each node has at most one incoming edge
-// slicing to fit:
-//  - given rdag
-//  - walk the rdag from its root, breadth first
-//    at each node, prune all but one incoming edge
+//
+//   rdag
+//
+//   each node has at most one incoming edge
+//
+//   slice to fit
+//   given rdag:
+//     walk the rdag from its root
+//     from each node:
+//       prune all but one incoming edge
 
 // pipe constraints:
-//  - rdag
-//  - exactly one leaf
-//                node with zero outgoing edges
-// slicing to fit:
-//  - given rdag, leaf
-//  - walk
+//   rdag
+//
+//   exactly one leaf
+//               node with zero outgoing edges
+//
+//   slice to fit
+//   given rdag, leaf:
+//     walk the rdag from the leaf, rootward
+
+function walk<Key, N, E>(
+  graph: Graph<Key, N, E>,
+  root: Key | N,
+) {
+}
+
+class Web<Key> implements Graph<Key, WebNode, WebEdge> {
+  readonly nodes: ReadonlyArray<N>;
+  readonly edges: ReadonlyArray<E>;
+  readonly root_key: Key;
+  readonly root: N;
+
+  constructor(graph: jsnx.DiGraph, root: Key) {
+
+  }
+}
+
+
+
+
+
+
+
+
+
 
 // Graphs!
 interface Graph<Key, N, E> {
