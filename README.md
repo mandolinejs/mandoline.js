@@ -1,24 +1,28 @@
 # mandoline.js [WIP]
 
 A tool for slicing and dicing graphs, networks, and webs.
+
 Given a graph, each added constraint slices a smaller shape:
-  Slice to connected graph: choose a root node, remove all unconnected.
-  Slice to RDAG: remove one edge from each cycle.
-  RDAG can be sliced multiple ways:
-    Slice to a tree: for each node, remove all but one parent edge.
-    Slice to a pipe: choose a leaf node, remove nodes that don't lead to leaf.
-  Slice tree or pipe to chain: remove all but one path from root to one leaf.
+  - Slice to connected graph: choose a root node, remove all unconnected.
+  - Slice to RDAG: remove one edge from each cycle.
+  - RDAG can be sliced multiple ways:
+    - Slice to a tree: for each node, remove all but one parent edge.
+    - Slice to a pipe: choose a leaf node, remove nodes that don't lead to leaf.
+  - Slice tree or pipe to chain: remove all but one path from root to one leaf.
 
-"mandoline voyage"?
+<aside>"mandoline voyage"?</aside>
 
-note: JS prototype chains form an RDAG, could lean on that as a foundation?
-      highly optimized in modern browsers
-NOTE: ONLY IF THE STRUCTURE IS ENCAPSULATED
-      don't place that burden on anyone who didn't ask for it
+<aside>
+  note: JS prototype chains form an RDAG, could lean on that as a foundation?
+        highly optimized in modern browsers
+  NOTE: ONLY IF THE STRUCTURE IS ENCAPSULATED
+        don't place that burden on anyone who didn't ask for it
+</aside>
 
 
 ## constraints
 
+```
 define constraints, fit such that:
   given graph:
     able to verify whether the graph fits
@@ -78,3 +82,4 @@ pipe constraints:
 
 chain constraints:
   pipe & tree
+```
