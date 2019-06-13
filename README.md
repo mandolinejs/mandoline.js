@@ -1,5 +1,5 @@
 # mandoline.js
-A tool for slicing and dicing graphs, webs, and networks.
+A tool for slicing and dicing graphs, networks, and webs.
 Given a graph, each added constraint slices a smaller shape:
   Slice to connected graph: choose a root node, remove all unconnected.
   Slice to RDAG: remove one edge from each cycle.

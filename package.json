@@ -1,0 +1,18 @@
+{
+  "name": "mandoline.js",
+  "version": "2019.0.0",
+  "description": "A tool for slicing and dicing graphs, networks, and webs",
+  "main": "index.ts",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mandolinejs/mandoline.js.git"
+  },
+  "author": "Abram Booth",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mandolinejs/mandoline.js/issues"
+  },
+  "homepage": "https://github.com/mandolinejs/mandoline.js#readme"
+}
