@@ -35,6 +35,8 @@ class NativeKeySet<Key extends string> extends KeySet<Key> {
   }
 }
 
+type Boolish = boolean | undefined;
+
 class NaiveKeySet<Key extends string> implements KeySet<Key> {
   #set: Record<Key, Boolish>;
 

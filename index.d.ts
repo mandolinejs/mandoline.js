@@ -1,96 +1,11 @@
-import {
-  AdditiveKeySet as KeySet,
-} from './key-set';
-
-/**** graph constraints ****/
-
-// define constraints, fit such that:
-//
-//   given graph:
-//     able to verify whether the graph fits
-//     easy to slice the graph to fit by removing/adding edges/nodes
-//
-//   given graph known to fit, small changes to the graph:
-//     easy to verify whether the changes would cause the graph not to fit
-
-// web constraints:
-//
-//   digraph
-//
-//   at least one valid root
-//                node with a path to each other node
-//
-//   verify given graph fits:
-//     todo
-//
-//   slice given graph, root to fit:
-//     walk the graph from the root
-//     prune un-visited nodes
-//
-//   slice given graph to fit:
-//     add "index" node as the graph's root node with an edge to each other node
-
-// rdag constraints:
-//
-//   web
-//
-//   no cycles
-//
-//   slice given web, root to fit:
-//     walk the web from the root
-//     from each node:
-//       prune its outgoing edges that point to the walk's already-visited-nodes
-
-// tree constraints:
-//
-//   rdag
-//
-//   each node has at most one incoming edge
-//
-//   slice to fit
-//   given rdag:
-//     walk the rdag from its root
-//     from each node:
-//       prune all but one incoming edge
-
-// pipe constraints:
-//   rdag
-//
-//   exactly one leaf
-//               node with zero outgoing edges
-//
-//   slice to fit
-//   given rdag, leaf:
-//     walk the rdag from the leaf, rootward
-
-class Web<Key> implements Graph<Key, WebNode, WebEdge> {
-  readonly nodes: ReadonlyArray<N>;
-  readonly edges: ReadonlyArray<E>;
-  readonly root_key: Key;
-  readonly root: N;
-
-  constructor(graph: jsnx.DiGraph, root: Key) {
-
-  }
-}
-
-
-
-
-
-
-
-
-
-
 // Graphs!
-interface Graph<Key, N, E> {
+export interface Graph<Key, N, E> {
   readonly nodes: ReadonlyArray<N>;
   readonly edges: ReadonlyArray<E>;
   readonly params: Readonly<GraphParams<Key>>;
 }
 
-type GraphParams = {
+export type GraphParams = {
   graph?: {
     in_degree?: number;
     out_degree?: number;
@@ -120,7 +35,7 @@ export interface GraphEdge<Key, N> {
   readonly yang: NodeRef<Key, N>;
 }
 
-// RDAGs!
+// RDAG!
 export interface Rdag<
   Key,
   N = RdagNode<Key>,
@@ -153,7 +68,7 @@ export interface RdagEdge<
   readonly leafward: NodeRef<Key, N>;
 }
 
-// Trees!
+// Tree!
 // RDAG where each non-root node has exactly one parent
 export interface Tree<
   Key,
@@ -196,6 +111,13 @@ export interface PipeNode<
   N = PipeNode<Key>,
   E = PipeEdge<Key>,
 > extends RdagNode<Key, N, E> {
+  readonly leaf_distance: number;
+
+  readonly rootward_edge: E | null;
+  readonly rootward_node: N | null;
+
+  readonly leafward_edge: E | null;
+  readonly leafward_node: N | null;
 }
 
 export interface PipeEdge<
@@ -220,16 +142,6 @@ export interface ChainNode<
   N = ChainNode<Key>,
   E = ChainEdge<Key>,
 > extends PipeNode<Key, N, E> {
-  readonly root_distance: number;
-  readonly leaf_distance: number;
-  readonly depth: number;
-
-  readonly parent_count: number;
-  readonly child_count: number;
-  readonly parents: ReadonlyArray<RdagEdge<Key>>;
-  readonly children: ReadonlyArray<RdagEdge<Key>>;
-  readonly parent_edges: ReadonlyArray<RdagEdge<Key>>;
-  readonly child_edges: ReadonlyArray<RdagEdge<Key>>;
 }
 
 export interface ChainEdge<

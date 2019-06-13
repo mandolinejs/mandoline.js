@@ -1,48 +1,79 @@
-Three related tools
+# mandoline.js
+A tool for slicing and dicing graphs, webs, and networks.
+Given a graph, each added constraint slices a smaller shape:
+  Slice to connected graph: choose a root node, remove all unconnected.
+  Slice to RDAG: remove one edge from each cycle.
+  RDAG can be sliced multiple ways:
+    Slice to a tree: for each node, remove all but one parent edge.
+    Slice to a pipe: choose a leaf node, remove nodes that don't lead to leaf.
+  Slice tree or pipe to chain: remove all but one path from root to one leaf.
 
-- [mandoline.js](./mandoline.js)
-  A tool for slicing and dicing graphs, webs, and networks
-    RDAG is a rooted slice of a graph/web/network
-    tree is an acyclic slice of an RDAG
-    chain is a 1-degree slice of a tree
-  e.g. 
-    RDAG breadcrumbs of a web browsing session form a slice of the web
-    DOM tree the currently rendered slice of an RDAG
-    for a node in a tree, the path to the root is a chain
+"mandoline voyage"?
 
-- discrete navigation controls with RDAG breadcrumbs
-- text editor where each sentence is an RDAG of words
-
-## rdag-dom
-
-`<Rdag::Element>` is like `HTMLElement` that can have multiple parents.
-
-`<Rdag>` starts a subtree in which DOM events may bubble to multiple
-parent `<Rdag::Element>`s.
-
-`RdagEvent` is an `Event` that will not be double-counted when it follows
-multiple paths to the same `<Rdag::Element>` or `<Rdag>` root.
+note: JS prototype chains form an RDAG, could lean on that as a foundation?
+      highly optimized in modern browsers
+NOTE: ONLY IF THE STRUCTURE IS ENCAPSULATED
+      don't place that burden on anyone who didn't ask for it
 
 
-## flow-text
+## constraints
 
-each sentence an rdag
-              a river delta
-each word defined
+define constraints, fit such that:
+  given graph:
+    able to verify whether the graph fits
+    easy to slice the graph to fit by removing/adding edges/nodes
 
-given a dictionary
-        wiki namespace
-zoom in on a word to see its definition
+  given graph known to fit, small changes to the graph:
+    easy to verify whether the changes would cause the graph not to fit
 
-allow borrowing words from other dictionaries
-build a web of references
-               loan-words
-```conversation
-yeah, we're friends! but we don't talk very often.
-we're not lauren::friends, but still have a strong connection
-```
 
-allow expressing definitions as deltas to other defined concepts
-every definition is eventually circular
-but try to cast a net wide enough to encircle the whole dictionary
-    aim for a complete graph
+rooted graph constraints:
+  directed graph
+
+  at least one valid root
+               node with a path to each other node
+
+  slice given graph, root to fit:
+    walk the graph from the root
+    prune un-visited nodes
+
+  slice given graph to fit:
+    add "index" node as the graph's root node with an edge to each other node
+
+
+rdag constraints:
+  rooted graph
+
+  no cycles
+
+  slice given web, root to fit:
+    walk the web from the root
+    from each node:
+      prune its outgoing edges that point to the walk's already-visited-nodes
+
+
+tree constraints:
+  rdag
+
+  each node has at most one incoming edge
+
+  slice to fit
+  given rdag:
+    walk the rdag from its root
+    from each node:
+      prune all but one incoming edge
+
+
+pipe constraints:
+  rdag
+
+  exactly one leaf
+              node with zero outgoing edges
+
+  slice to fit
+  given rdag, leaf:
+    walk the rdag from the leaf, rootward
+      prune all un-visited nodes
+
+chain constraints:
+  pipe & tree

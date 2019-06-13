@@ -4,7 +4,7 @@ type DictionaryOptions<K, V> = {
 };
 
 // optimized for fast add, remove, fork, union
-// uses JS prototype chain internally, best not dig unless you're into that
+// abuses JS prototype chain, best not dig unless you're into that
 // lots of edits will accumulate memory over time
 // consider using `.flattened()` periodically if long-lived
 export class Dictionary<K extends string, V> {
@@ -15,9 +15,21 @@ export class Dictionary<K extends string, V> {
     fork_from,
     entries,
   }: DictionaryOptions<K, V> = {}) {
-    this.#set = Object.create(
+
+    let root_proto_props = undefined;
+    if (entries) {
+      root_proto_props = entries.reduce(
+        (acc, [k, v]) => ({
+          ...acc,
+          [k]: this.key_property(v),
+        }),
+        {},
+      );
+    }
+
+    this.#leaf = Object.create(
       fork_from ? fork_from.#leaf : null,
-      entries ? this.constructor.key_properties(entries) : undefined,
+      root_proto_props,
     );
   }
 
@@ -30,20 +42,8 @@ export class Dictionary<K extends string, V> {
     };
   }
 
-  static properties(
-    entries: IterableIterator<[K, V]>,
-  ) {
-    return entries.reduce(
-      (acc, [k, v]) => ({
-        ...acc,
-        [k]: this.key_property(v),
-      }),
-      {},
-    );
-  }
-
   *keys() {
-    for (const key in this.#set) {
+    for (const key in this.#leaf) {
       if (this.contains(key)) {
         yield key;
       }
@@ -64,6 +64,12 @@ export class Dictionary<K extends string, V> {
   fork() {
     return new Dictionary<K, V>({
       fork_from: this,
+    });
+  }
+
+  flattened() {
+    return new Dictionary<K, V>({
+      entries: this.keys(),
     });
   }
 }
@@ -106,7 +112,7 @@ export class KeySet<K extends string> extends Dictionary<K, boolean> {
     });
   }
 
-  flatten() {
+  flattened() {
     return new KeySet<K, V>({
       keys: this.keys(),
     });

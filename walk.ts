@@ -74,7 +74,7 @@ class Walker<K extends string, N, E, G extends Graph<K, N, E>> {
   }
 }
 
-function walk<K extends string, N, E>(
+function* walk<K extends string, N, E>(
   graph: Graph<K, N, E>,
   start_key: K,
   options: WalkOptions<K, N, E> = {},
