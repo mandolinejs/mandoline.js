@@ -10,57 +10,74 @@ function is_empty(line: string) {
   return !line;
 }
 
-type TreemlBlock = ReadonlyArray<string>;
-
-type ParserRectangle = {
+type TreemlBlockParams = {
+  input: ReadonlyArray<string>,
   start_line: number,
   end_line: number,
   start_column: number,
-  end_column?: number,
+};
+
+type CloneParams = {
+  start_line_delta: number,
+  line_count: number,
+  start_column_delta: number,
 };
 
 // View on a rectangle of treeml input that represents a single tree
-class TreemlTree {
+class TreemlBlock {
   constructor(
-    public input: TreemlBlock,
-    public start_line: number,
-    public end_line: number,
-    public start_column: number,
+    { input, start_line, end_line, start_column }: TreemlBlockParams,
   ) {
+    Object.assign(
+      this,
+      { input, start_line, end_line, start_column },
+    );
   }
 
   get root_key(): string {
-    const op_index = this.first_line.indexOf(ops.leafward_edge);
+    const { first_line } = this;
+
+    const key_regex = new RegExp(
+      `^\s*(?:${ops.leafward_edge}\s*)?(?<root_key>\S+)`,
+    );
+
+    const key_match = first_line.match(key_regex);
+    if (!key_match) {
+      throw new Error(`No key found: "${first_line}"`);
+    }
+
+    return key_match.groups.root_key;
   }
 
   *lines() {
+    // TODO memoize?
     for (const line of this.input.slice(
       this.start_line,
       this.end_line,
     )) {
-      yield line.slice(
-        this.start_column,
-        this.end_column,
-      );
+      yield line.slice(this.start_column);
     }
   }
 
   get first_line() {
     const line = this.input[this.start_line];
     return line ?
-      line.slice(this.start_column, this.end_column) :
+      line.slice(this.start_column) :
       undefined;
   }
 
-  *split(should_split_before: (line: string) => boolean) {
-    let chunk = this.clone();
+  *split_before_each(should_split: (line: string) => boolean) {
+    let chunk_start = 0;
+    let chunk_end = 0;
     for (const line of this.lines()) {
-      if (chunk.length && should_split_before(line)) {
-        yield chunk;
-        chunk = [];
-      }
-      if (line.length) {
-        chunk.push(line);
+      const chunk_length = chunk_end - chunk_start;
+
+      if (chunk_length && should_split(line)) {
+        yield this.clone({
+          start_line_delta: chunk_start,
+          line_count: chunk_length,
+        });
+        chunk_start = chunk_end;
       }
     }
     if (chunk.length) {
@@ -68,71 +85,68 @@ class TreemlTree {
     }
   }
 
-  clone() {
-    return new Rectangle(
-      this.input,
-      this.start_line,
-      this.end_line,
-      this.start_column,
-      this.end_column,
-    );
+  clone(params: Partial<CloneParams> = {}) {
+    const { input, start_line, end_line, start_column } = this;
+    const {
+      start_line_delta = 0,
+      end_line =
+      start_column_delta = 0,
+    }: CloneParams = params;
+
+    return new TreemlBlock({
+      input,
+      start_line: start_line + start_line_delta,
+      end_line: end_line + end_line_delta,
+      start_column: start_column + start_column_delta,
+    });
   }
 }
 
-class GraphParser {
-  graph: Graph;
+class TreemlParser {
+  output: Graph;
   input: Array<string>;
 
   constructor(input: string) {
-    this.graph = new Graph();
     this.input = input.split('\n');
+    this.output = new Graph();
   }
 
   parse() {
 
   }
 
-  parse_block(rect: Rectangle) {
-    for (const child_tree of rect.split(
+  parse_block(block: TreemlBlock) {
+    for (const child_tree of block.split_before_each(
       line => line[0] !== ' ',
     )) {
       this.parse_tree(child_tree);
     }
   }
 
-  parse_tree(rect: Rectangle) {
+  parse_tree(block: TreemlBlock) {
     /* assumes a single root, e.g.
-     * graph```
+     * treeml```
      * a -> b -> c -> f
      *             -> g
      *        -> d -> e
+     * a b c f
+     *       g
+     *     d e
      * ```
      */
-    const first_line = rect.first_line();
+    const { graph } = this;
+    const { first_line } = block;
+
     const edge_index = first_line.indexOf(ops.leafward_edge);
     const root_key = first_line.slice(0, edge_index).trim();
-    const root = this.graph.get_or_add_node(root_key);
-    this.graph.add
-
-    for (const child_tree of rect.split(
+    const root = output.get_or_add_node(root_key);
+    const child_trees = block.split_before_each(
       line => line.indexOf(ops.leafward_edge) === edge_index,
-    )) {
+    );
 
-    }
-  }
-
-  *slice_lines(
-    rectangle: ParserRectangle,
-  ) {
-    // TODO: cache/memoize?
-    for (const line of this.input.slice(
-      rectangle.start_line,
-      rectangle.end_line,
-    )) {
-      yield line.slice(
-        rectangle.start_column,
-        rectangle.end_column,
-      );
+    for (const child_tree of child_trees) {
+      output.add_edge(root, child_tree.root);
+      this.parse_
     }
   }
 }
