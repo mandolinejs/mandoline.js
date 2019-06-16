@@ -4,6 +4,8 @@
   "description": "A tool for slicing and dicing graphs, networks, and webs",
   "main": "index.ts",
   "scripts": {
+    "build": "babel src -d lib --extensions '.ts'",
+    "test": "ava"
   },
   "repository": {
     "type": "git",
@@ -14,5 +16,16 @@
   "bugs": {
     "url": "https://github.com/mandolinejs/mandoline.js/issues"
   },
-  "homepage": "https://github.com/mandolinejs/mandoline.js#readme"
+  "homepage": "https://github.com/mandolinejs/mandoline.js#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-typescript": "^7.3.3",
+    "ava": "^2.1.0",
+    "typescript": "^3.5.2"
+  },
+  "dependencies": {
+    "@glimmer/tracking": "^0.14.0-alpha.1"
+  }
 }

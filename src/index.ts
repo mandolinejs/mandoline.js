@@ -1,20 +1,12 @@
+import {
+  AdditiveKeySet as KeySet,
+} from './key-set';
+
 // Graphs!
 export interface Graph<Key, N, E> {
   readonly nodes: ReadonlyArray<N>;
   readonly edges: ReadonlyArray<E>;
-  readonly params: Readonly<GraphParams<Key>>;
 }
-
-export type GraphParams = {
-  graph?: {
-    in_degree?: number;
-    out_degree?: number;
-    total_degree?: number;
-  },
-  rdag?: {
-    depth?: number;
-  },
-};
 
 export interface GraphNode<Key, N, E> {
   readonly key: Key;
@@ -38,16 +30,16 @@ export interface GraphEdge<Key, N> {
 // RDAG!
 export interface Rdag<
   Key,
-  N = RdagNode<Key>,
-  E = RdagEdge<Key>,
+  N,
+  E,
 > extends Graph<Key, N, E> {
-  readonly root: NodeRef<K, N>;
+  readonly root: NodeRef<Key, N>;
 }
 
 export interface RdagNode<
   Key,
-  N = RdagNode<Key>,
-  E = RdagEdge<Key>,
+  N,
+  E,
 > extends GraphNode<Key, N, E> {
   readonly root_path: Chain<Key, N, E>;
   readonly root_distance: number;
@@ -61,9 +53,8 @@ export interface RdagNode<
 
 export interface RdagEdge<
   Key,
-  N = RdagNode<Key>,
-  E = RdagEdge<Key>,
-> extends GraphEdge<Key, N, E> {
+  N,
+> extends GraphEdge<Key, N> {
   readonly rootward: NodeRef<Key, N>;
   readonly leafward: NodeRef<Key, N>;
 }
@@ -72,15 +63,15 @@ export interface RdagEdge<
 // RDAG where each non-root node has exactly one parent
 export interface Tree<
   Key,
-  N = TreeNode<Key>,
-  E = TreeEdge<Key>,
+  N,
+  E,
 > extends Rdag<Key, N, E> {
 }
 
 export interface TreeNode<
   Key,
-  N = TreeNode<Key>,
-  E = TreeEdge<Key>,
+  N,
+  E,
 > extends RdagNode<Key, N, E> {
   readonly rootward_edge: E | null;
   readonly rootward_node: N | null;
@@ -88,9 +79,8 @@ export interface TreeNode<
 
 export interface TreeEdge<
   Key,
-  N = TreeNode<Key>,
-  E = TreeEdge<Key>,
-> extends RdagEdge<Key, N, E> {
+  N,
+> extends RdagEdge<Key, N> {
 }
 
 // Pipe!
@@ -99,8 +89,8 @@ export interface TreeEdge<
 // Sorta the opposite of a Tree.
 export interface Pipe<
   Key,
-  N = PipeNode<Key>,
-  E = PipeEdge<Key>,
+  N,
+  E,
 > extends Rdag<Key, N, E> {
   readonly root: NodeRef<Key, N>;
   readonly leaf: NodeRef<Key, N>;
@@ -108,8 +98,8 @@ export interface Pipe<
 
 export interface PipeNode<
   Key,
-  N = PipeNode<Key>,
-  E = PipeEdge<Key>,
+  N,
+  E,
 > extends RdagNode<Key, N, E> {
   readonly leaf_distance: number;
 
@@ -122,9 +112,8 @@ export interface PipeNode<
 
 export interface PipeEdge<
   Key,
-  N = PipeNode<Key>,
-  E = PipeEdge<Key>,
-> extends RdagEdge<Key, N, E> {
+  N,
+> extends RdagEdge<Key, N> {
 }
 
 // Chain!
@@ -132,26 +121,36 @@ export interface PipeEdge<
 // Basically a linked list.
 export interface Chain<
   Key,
-  N = ChainNode<Key>,
-  E = ChainEdge<Key>,
+  N,
+  E,
 > extends Pipe<Key, N, E> {
 }
 
 export interface ChainNode<
   Key,
-  N = ChainNode<Key>,
-  E = ChainEdge<Key>,
+  N,
+  E,
 > extends PipeNode<Key, N, E> {
 }
 
 export interface ChainEdge<
   Key,
-  N = ChainNode<Key>,
-  E = ChainEdge<Key>,
-> extends PipeEdge<Key, N, E> {
+  N,
+> extends PipeEdge<Key, N> {
 }
 
 // Other things?
 export interface HasContents<T> {
   contents: T;
+}
+
+class RootedGraph<Key> implements Graph<Key, WebNode, WebEdge> {
+  readonly nodes: ReadonlyArray<N>;
+  readonly edges: ReadonlyArray<E>;
+  readonly root_key: Key;
+  readonly root: N;
+
+  constructor(graph: jsnx.DiGraph, root: Key) {
+
+  }
 }
