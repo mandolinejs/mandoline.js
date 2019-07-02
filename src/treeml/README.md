@@ -50,3 +50,10 @@ could allow keyed edges, like
 a -foo> b
 b -bar-baz> c
 ```
+
+## define some concepts in terms of their constraints
+
+```constraints
+
+constrain `->` notation
+          -a

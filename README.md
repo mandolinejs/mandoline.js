@@ -23,10 +23,10 @@ Given a graph, each added constraint slices a smaller shape:
 
 dependency graph ( `->` means "depends on")
 ```treeml
+treeml <> constraints
+
 mandoline -> treeml
           -> constraints
-
-treeml <-> constraints
 
 gingerbread -> mandoline
             -> constraints
@@ -41,6 +41,7 @@ constraints <> treeml
 treeml <- mandoline <- gingerbread
 ```
 
+
 ## define some concepts in terms of their constraints
 
 ```constraints
@@ -53,56 +54,29 @@ constrain fit such that:
     easy to verify whether the changes would cause the graph not to fit
 
 
-constrain rooted-graph such that:
-  isa directed-graph
+constrain rdag such that:
+  isa graph
 
   has at least one valid root
                    node with a path to each other node
-
-  can slice to fit
-  given graph, root:
-    walk the graph from the root
-    prune un-visited nodes
-
-  can slice to fit
-  given graph:
-    add "index" node as the graph's root node with an edge to each other node
-
-
-constrain rdag such that:
-  isa rooted-graph
-
   has no cycles
 
   can slice to fit
-  given web, root:
-    walk the web from the root
-    from each node:
-      prune its outgoing edges that point to the walk's already-visited-nodes
-
-
-constrain tree such that:
-  isa rdag
-
-  each node has at most one incoming edge
-
-  can slice to fit
-  given rdag:
-    walk the rdag from its root
-    from each node:
-      prune all but one incoming edge
+  given graph, root:
+    walk the graph starting at root.
+    at each node:
+      skip outgoing edges that lead to nodes closer to root
 
 
 constrain pipe such that:
   isa rdag
 
-  has *one* leaf
-            node with zero outgoing edges
+  has exactly one leaf
+              node with zero outgoing edges
 
   can slice to fit
   given rdag, leaf:
-    walk the rdag from the leaf, rootward
-      prune all un-visited nodes
+    walk the rdag starting at leaf, rootward.
 
 
 constrain chain such that:
