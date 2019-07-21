@@ -2,8 +2,8 @@
 
 A tool for slicing and dicing graphs, networks, and webs.
 
-Given a graph, each added constraint slices a smaller shape:
-  - Slice to connected graph: choose a root node, remove all unconnected.
+Given a web, each added constraint slices a smaller shape:
+  - Slice to connected web: choose a root node, remove all unconnected.
   - Slice to RDAG: remove one edge from each cycle.
   - RDAG can be sliced multiple ways:
     - Slice to a tree: for each node, remove all but one parent edge.
@@ -21,18 +21,20 @@ Given a graph, each added constraint slices a smaller shape:
 
 ## describe how this tool relates to some other tools
 
-dependency graph ( `->` means "depends on")
 ```treeml
-treeml <> constraints
+-> means depends-on
+
+treeml
+
+walker
 
 mandoline -> treeml
-          -> constraints
+          -> walker
 
 gingerbread -> mandoline
-            -> constraints
 ```
 
-same graph rooted differently
+same web rooted differently
 ```treeml
 constraints <> treeml
             <- mandoline
@@ -47,25 +49,28 @@ treeml <- mandoline <- gingerbread
 ```constraints
 
 constrain fit such that:
-  can verify given graph
-  easy to slice given graph to fit by removing/adding edges/nodes
+  can verify given web
+  easy to slice given web to fit by removing/adding edges/nodes
 
-  given graph verified to fit, small changes to the graph:
-    easy to verify whether the changes would cause the graph not to fit
+  given web verified to fit, small changes to the web:
+    easy to verify whether the changes would cause the web not to fit
+
 
 
 constrain rdag such that:
-  isa graph
+  isa web
 
-  has at least one valid root
-                   node with a path to each other node
+  has a root
+        node with a path to each other node
+
   has no cycles
+         paths that lead from a node back to itself
 
   can slice to fit
-  given graph, root:
-    walk the graph starting at root.
+  given web, root:
+    walk the web starting at root.
     at each node:
-      skip outgoing edges that lead to nodes closer to root
+      skip outgoing edges that lead to visited nodes closer to root
 
 
 constrain pipe such that:
@@ -77,10 +82,26 @@ constrain pipe such that:
   can slice to fit
   given rdag, leaf:
     walk the rdag starting at leaf, rootward.
-
-
-constrain chain such that:
-  isa tree
-  isa pipe 
-
 ```
+
+## how to slice a web
+
+First, choose where in a given web to start. Pick a thing
+                                                    node
+                                                    page
+                                                    vertex
+                                                    place
+and name that thing `root`.
+
+
+Next, take a walk. Starting at `root`, step along some edges to visit
+connected nodes. You could follow every edge, or follow none. From each visited
+node, take more steps to any number of adjacent nodes.
+
+
+Define a slice by including all the nodes you walked through
+                                the edges that connected them.
+Order does not matter.
+
+
+Define a walk by describing how to choose edges to follow from a given node.
