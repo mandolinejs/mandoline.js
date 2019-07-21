@@ -1,0 +1,12 @@
+<ul
+  class='milestone'
+  ...attributes
+>
+  {{#each @milestone.names as |name|}}
+    {{yield (hash
+      Label=(component 'rooted-trail/milestone-label')
+      name=name
+      milestone=@milestone
+    )}}
+  {{/each}}
+</ul>

@@ -1,0 +1,29 @@
+.trail-system {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.rooted-trail {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: stretch;
+
+  border: 1px solid lightgreen;
+  padding: 1px;
+  margin: 1px;
+}
+
+.milestone {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+
+  border: 1px solid violet;
+  padding: 1px;
+  margin: 1px;
+}
+
+.milestone-name {
+}
