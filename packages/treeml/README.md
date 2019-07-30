@@ -87,9 +87,7 @@ for each line of a given paragraph:
   set tabstops at the start of each token
   compare first tabstop with the line above:
     if the line above starts earlier:
-      
-    
-      
+      ...
     tabstops should match up
     connect first token to the above token with the same tabstop
     push first tabstop onto a stack
