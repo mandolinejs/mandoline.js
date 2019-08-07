@@ -27,6 +27,7 @@
     "typescript": "^3.5.2"
   },
   "dependencies": {
-    "@glimmer/tracking": "^0.14.0-alpha.1"
+    "@glimmer/tracking": "^0.14.0-alpha.1",
+    "true-myth": "^3.0.0"
   }
 }

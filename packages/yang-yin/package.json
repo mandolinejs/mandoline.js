@@ -1,0 +1,10 @@
+{
+  "name": "yang-yin",
+  "version": "2019.0.0",
+  "description": "orbital simulator for bodies of comparable scale",
+  "main": "index.js",
+  "scripts": {
+  },
+  "author": "",
+  "license": "AGPL"
+}
