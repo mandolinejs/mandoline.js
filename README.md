@@ -17,6 +17,7 @@ Given a web, each added constraint slices a smaller shape:
         highly optimized in modern browsers
   NOTE: ONLY IF THE STRUCTURE IS ENCAPSULATED
         don't place that burden on anyone who didn't ask for it
+  note: that might also be a terrible idea
 </aside>
 
 ## describe how this tool relates to some other tools
@@ -46,7 +47,7 @@ treeml <- mandoline <- gingerbread
 
 ## define some concepts in terms of their constraints
 
-```constraints
+```treeml.constraints
 
 constrain fit such that:
   can verify given web
@@ -81,11 +82,37 @@ constrain pipe such that:
 
   can slice to fit
   given rdag, leaf:
-    walk the rdag starting at leaf, rootward.
+    walk rdag starting at the leaf, rootward.
+
+
+constrain ring such that:
+  isa pipe where the leaf is the root
+
+  can slice to fit
+  given web, root:
+    slice two rdags:
+      along outgoing edges
+      along incoming edges
+    take their intersection
+
+  every cyclic path passes through the root
+  the root is an essential node in the ring
+  it may be the only one
+  or may be all nodes are essential
+
+
+constrain yang-yin such that:
+  isa ring with exactly two essential nodes
+
+  heuristic for balance:
+    take many cyclic path slices -- more is better
+    for each slice:
+      consider the distance between yin and yang
 ```
 
 ## how to slice a web
 
+```treeml.text
 First, choose where in a given web to start. Pick a thing
                                                     node
                                                     page
@@ -105,3 +132,4 @@ Order does not matter.
 
 
 Define a walk by describing how to choose edges to follow from a given node.
+```
