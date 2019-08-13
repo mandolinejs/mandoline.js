@@ -19,6 +19,11 @@ Given a web, each added constraint slices a smaller shape:
         don't place that burden on anyone who didn't ask for it
   note: that might also be a terrible idea
 </aside>
+<aside>
+how much of this does tinkerpop already take care of?
+
+tinkerpop: https://tinkerpop.apache.org/ 
+</aside>
 
 ## describe how this tool relates to some other tools
 
@@ -108,6 +113,15 @@ constrain yang-yin such that:
     take many cyclic path slices -- more is better
     for each slice:
       consider the distance between yin and yang
+```
+
+```treeml.text
+a trailmap is:
+  a set of milestones
+  web such that milestones are connected by pipes
+
+a timeline is:
+  a trailmap that forms a linked list of milestones
 ```
 
 ## how to slice a web

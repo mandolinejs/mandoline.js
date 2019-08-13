@@ -16,8 +16,6 @@ interface Timeline<V> {
   set_value_at(time: TimeValue, value: V): void;
 
   reset(initial_value?: V): void;
-
-  constructor(initial_value: V): Timeline<V>;
 }
 
 class Timeline<V> {

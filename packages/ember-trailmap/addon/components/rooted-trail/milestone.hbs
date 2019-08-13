@@ -1,11 +1,10 @@
 <ul
-  class='milestone'
+  etm:milestone-names
   ...attributes
 >
   {{#each @milestone.names as |name|}}
     {{yield (hash
-      Label=(component 'rooted-trail/milestone-label')
-      name=name
+      Label=(component 'rooted-trail/milestone-label' name=name)
       milestone=@milestone
     )}}
   {{/each}}

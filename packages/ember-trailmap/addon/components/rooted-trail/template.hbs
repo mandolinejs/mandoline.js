@@ -1,5 +1,13 @@
-{{#each @milestones as |milestone|}}
-  <RootedTrail::Milestone
-    @milestone={{milestone}}
-  />
-{{/each}}
+<ul
+  etm:rooted-trail
+  ...attributes
+>
+  {{#each @milestones as |milestone|}}
+    <li etm:milestone>
+      {{yield (hash
+        Milestone=(component 'rooted-trail/milestone' milestone=milestone)
+        @milestone=milestone
+      )}}
+    </li>
+  {{/each}}
+</ul>
