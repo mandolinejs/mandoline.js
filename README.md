@@ -122,6 +122,7 @@ a trailmap is:
 
 a timeline is:
   a trailmap that forms a linked list of milestones
+  each milestone is an essential node
 ```
 
 ## how to slice a web
