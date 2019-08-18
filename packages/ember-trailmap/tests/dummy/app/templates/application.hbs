@@ -1,3 +1,35 @@
-<h2 id="title">Welcome to Ember</h2>
+<h2 id="title">ember-trailmap</h2>
 
 {{outlet}}
+
+<section>
+  <h3>example: a timeline</h3>
+
+  <ol etm:timeline>
+    <li etm:milestone>Inception</li>
+    <li etm:event>Plan: Data collection</li>
+    <li etm:event>Amendment to data collection plan</li>
+    <li etm:milestone>Start data collection</li>
+    <li etm:event>Amendment to data collection plan</li>
+    <li etm:event>Analysis plan</li>
+    <li etm:event>Archive dataset</li>
+    <li etm:milestone>Start analysis</li>
+    <li etm:event>Amendment to analysis plan</li>
+    <li etm:event>Write-up</li>
+    <li etm:milestone>Closure</li>
+  </ol>
+
+  <Timeline as |time|>
+    <time.Anchor>Inception</time.Anchor>
+    <time.Event>Plan: Data collection</time.Event>
+    <time.Event>Amendment to data collection plan</time.Event>
+    <time.Anchor>Start data collection</time.Anchor>
+    <time.Event>Amendment to data collection plan</time.Event>
+    <time.Event>Analysis plan</time.Event>
+    <time.Event>Archive dataset</time.Event>
+    <time.Anchor>Start analysis</time.Anchor>
+    <time.Event>Amendment to analysis plan</time.Event>
+    <time.Event>Write-up</time.Event>
+    <time.Anchor>Closure</time.Anchor>
+  </Timeline>
+</section>
