@@ -6,30 +6,42 @@
   <h3>example: a timeline</h3>
 
   <ol etm:timeline>
-    <li etm:milestone>Inception</li>
+    <li etm:anchor>Inception</li>
     <li etm:event>Plan: Data collection</li>
     <li etm:event>Amendment to data collection plan</li>
-    <li etm:milestone>Start data collection</li>
+    <li etm:anchor>Start data collection</li>
     <li etm:event>Amendment to data collection plan</li>
     <li etm:event>Analysis plan</li>
     <li etm:event>Archive dataset</li>
-    <li etm:milestone>Start analysis</li>
+    <li etm:anchor>Start analysis</li>
     <li etm:event>Amendment to analysis plan</li>
     <li etm:event>Write-up</li>
-    <li etm:milestone>Closure</li>
+    <li etm:anchor>Closure</li>
   </ol>
 
   <Timeline as |time|>
     <time.Anchor>Inception</time.Anchor>
-    <time.Event>Plan: Data collection</time.Event>
-    <time.Event>Amendment to data collection plan</time.Event>
+
+    <time.Chaos as |chaos|>
+      <chaos.Event>Plan: Data collection</chaos.Event>
+      <chaos.Event>Amendment to data collection plan</chaos.Event>
+    </time.Chaos>
+
     <time.Anchor>Start data collection</time.Anchor>
-    <time.Event>Amendment to data collection plan</time.Event>
-    <time.Event>Analysis plan</time.Event>
-    <time.Event>Archive dataset</time.Event>
+
+    <time.Chaos as |chaos|>
+      <chaos.Event>Amendment to data collection plan</chaos.Event>
+      <chaos.Event>Analysis plan</chaos.Event>
+      <chaos.Event>Archive dataset</chaos.Event>
+    </time.Chaos>
+
     <time.Anchor>Start analysis</time.Anchor>
-    <time.Event>Amendment to analysis plan</time.Event>
-    <time.Event>Write-up</time.Event>
+
+    <time.Chaos as |chaos|>
+      <chaos.Event>Amendment to analysis plan</chaos.Event>
+      <chaos.Event>Write-up</chaos.Event>
+    </time.Chaos>
+
     <time.Anchor>Closure</time.Anchor>
   </Timeline>
 </section>
